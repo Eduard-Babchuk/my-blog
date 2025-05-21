@@ -1,39 +1,37 @@
-<!DOCTYPE html>
-<html lang="uk">
-    <head>
-        <meta charset="utf-8">
-        <title>Blog</title>
-    </head>
-    <body>
+{% extends "base.html" %}
+{% load static %}
 
-    <h2>Категорії</h2>
+{% block content %}
+{% spaceless %}
 
-    {% if categories %}
-        {% for item in categories %}
-            <div>
-                <a href="{{ item.get_absolute_url }}">
-                    <h4>{{ item.category }}</h4>
-                </a>
-            </div>
-        {% endfor %}
-    {% endif %}
+<h2>Категорії</h2>
 
-    {% if articles %}
-        <h2>Публікації</h2>
-        {% for item in articles %}
-            <div>
-                <a href="{{ item.get_absolute_url }}">
-                    <h4>{{ item.title }}</h4>
-                </a>
-                <h5>{{ item.pub_date|date:"j E Y" }}</h5>
-                <p>{{ item.description|striptags|truncatewords:32 }}</p>
-            </div>
-        {% endfor %}
-    {% endif %}
+{% if categories %}
+    {% for item in categories %}
+        <div>
+            <a href="{{ item.get_absolute_url }}">
+                <h4>{{ item.category }}</h4>
+            </a>
+        </div>
+    {% endfor %}
+{% endif %}
 
-    <a href="{% url 'articles-list' %}">
-        <h4>Всі публікації</h4>
-    </a>
+{% if articles %}
+    <h2>Публікації</h2>
+    {% for item in articles %}
+        <div class="article-block">
+            <a href="{{ item.get_absolute_url }}">
+                <h4>{{ item.title }}</h4>
+            </a>
+            <h5>{{ item.pub_date|date:"j E Y"|safe|linebreaks }}</h5>
+            <p>{{ item.description|safe|escape|striptags|truncatewords_html:32 }}</p>
+        </div>
+    {% endfor %}
+{% endif %}
 
-    </body>
-</html>
+<a href="{% url 'articles-list' %}">
+    <h4>Всі публікації</h4>
+</a>
+
+{% endspaceless %}
+{% endblock %}
